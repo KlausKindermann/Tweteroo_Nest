@@ -17,7 +17,11 @@ export class AppController {
   @Post('sign-up')
   @HttpCode(HttpStatus.OK)
   createUser(@Body() body: CreateUserDTO) {
-    return this.appService.createUser(body);
+    try {
+      return this.appService.createUser(body);
+    } catch (error) {
+      throw new HttpException('UNAUTHORIZED', HttpStatus.UNAUTHORIZED);
+    }
   }
 
   @Post('tweets')
