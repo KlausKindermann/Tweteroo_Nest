@@ -1,7 +1,7 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpException, HttpStatus, Param, Post, Query } from '@nestjs/common';
 import { AppService } from './app.service';
-import { CreateUserDTO } from 'src/dtos/create-user.dto';
 import { CreateTweetDTO } from './dtos/create-tweet.dto';
+import { CreateUserDTO } from './dtos/create-user.dto';
 
 @Controller()
 export class AppController {
@@ -14,19 +14,31 @@ export class AppController {
     return this.appService.createUser(body);
   }
 
-  @Post('/tweets')
+  @Post('tweets')
   @HttpCode(HttpStatus.CREATED)
   postTweets(@Body() body: CreateTweetDTO) {
-    return this.appService.postTweets(body);
+    try {
+      return this.appService.postTweets(body);
+    } catch (error) {
+      throw new HttpException('UNAUTHORIZED', HttpStatus.UNAUTHORIZED);
+    }
   }
 
-  @Get('/tweets')
-  getTweets(@Query('page') page: string) {
-    return this.appService.getTweets(page);
+  @Get('tweets')
+  getTweets() {
+    try {
+      return this.appService.getTweets();
+    } catch (error) {
+      throw new HttpException('BADREQUEST', HttpStatus.BAD_REQUEST);
+    }
   }
 
-  @Get('/tweets/:username')
+  @Get('tweets/:username')
   getTweetsById(@Param('username') username: string) {
-    return this.appService.getTweetsById(username);
+    try {
+      return this.appService.getTweetsById(username);
+    } catch (error) {
+      throw new HttpException('BADREQUEST', HttpStatus.BAD_REQUEST);
+    }
   }
 }

@@ -26,9 +26,9 @@ export class AppService {
     for (let i = 0; i < this.users.length; i++) {
       const user = this.users[i];
       if (user.usernamePrivate === tweet.username) {
+        login = true;
         const message = new Tweets(user, tweet.tweet);
         this.tweets.push(message);
-        login = true;
       }
     }
     if (login = false) {
@@ -55,9 +55,11 @@ export class AppService {
 
   getTweets() {
     const tweets = [];
-    if (this.tweets.length < 15) {
-      for (let i = 1; i < 16; i++) {
-        const tweet = this.tweets[i];
+    if (this.tweets.length === 0) {
+      return tweets;
+    } else if (this.tweets.length >= 15) {
+      for (let i = 1; i <= 16; i++) {
+        const tweet = this.tweets[this.tweets.length - i];
         tweets.push({
           username: tweet.userPrivate.usernamePrivate,
           avatar: tweet.userPrivate.avatarPrivate,
