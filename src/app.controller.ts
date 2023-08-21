@@ -1,29 +1,32 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query } from '@nestjs/common';
 import { AppService } from './app.service';
-import { CreateUserDto } from './dtos/user.dto';
+import { CreateUserDTO } from 'src/dtos/create-user.dto';
+import { CreateTweetDTO } from './dtos/create-tweet.dto';
 
-@Controller("users")
+@Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) { }
 
-  // Router.get("users", getUsers)
-  /*@Get()
-  getUsers() {
-    return this.appService.getUsers();
-  }
+  constructor(private appService: AppService) { }
 
-  // function findOne(req: Request, res: Response) => { req.params.id  }
-  @Get(":id")
-  findOne(@Param("id", ParseIntPipe) id: number) {
-    console.log(id);
-    return id; // usuário correspondente ao id
-  }*/
-
-  // joi => name, email =? schema UserSchema ======= DTO (Data Transfer Object)
-  //function createUser(req: Request, res: Response) => { req.body as Omit<User, "id"> }
-  @Post()
-  createUser(@Body() body: CreateUserDto) {
+  @Post('sign-up')
+  @HttpCode(HttpStatus.OK)
+  createUser(@Body() body: CreateUserDTO) {
     return this.appService.createUser(body);
   }
-}
 
+  @Post('/tweets')
+  @HttpCode(HttpStatus.CREATED)
+  postTweets(@Body() body: CreateTweetDTO) {
+    return this.appService.postTweets(body);
+  }
+
+  @Get('/tweets')
+  getTweets(@Query('page') page: string) {
+    return this.appService.getTweets(page);
+  }
+
+  @Get('/tweets/:username')
+  getTweetsById(@Param('username') username: string) {
+    return this.appService.getTweetsById(username);
+  }
+}
