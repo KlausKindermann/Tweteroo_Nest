@@ -16,6 +16,10 @@ export class AppService {
     this.users = [];
   }
 
+  getHealth(): string {
+    return "I'm okay!";
+  }
+  
   createUser(user: CreateUserDTO) {
     const person = new User(user.username, user.avatar);
     return this.users.push(person);

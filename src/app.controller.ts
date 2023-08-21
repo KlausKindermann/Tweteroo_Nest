@@ -8,6 +8,11 @@ export class AppController {
 
   constructor(private appService: AppService) { }
 
+  @Get('/')
+  getHealth(): string {
+    return this.appService.getHealth();
+  }
+  
   @Post('sign-up')
   @HttpCode(HttpStatus.OK)
   createUser(@Body() body: CreateUserDTO) {
